@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Movie;
 import android.graphics.Paint;
 import android.os.AsyncTask;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
@@ -39,11 +40,16 @@ public class AnimatedGifView extends View {
     }
 
     public AnimatedGifView(Context context) {
-        super(context);
+        this(context, null);
+    }
 
+    public AnimatedGifView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public AnimatedGifView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
         setFocusable(true);
-
-
     }
 
     public void setImageResource(int resId) {
