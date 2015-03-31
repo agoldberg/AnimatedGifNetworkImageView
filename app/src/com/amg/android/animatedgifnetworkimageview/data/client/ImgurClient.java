@@ -91,7 +91,7 @@ public class ImgurClient {
 
     public void getRGallery(String galleryName, final ImgurClientInterface callback){
         String url = buildRGalleryUrl(galleryName);
-        Log.e(TAG,"getting R Gallery with url: "+ url);
+        Log.i(TAG,"getting R Gallery with url: "+ url);
         fetchImages(url,callback);
     }
 
@@ -109,7 +109,7 @@ public class ImgurClient {
 
     public void searchGallery(String searchTerm, String searchType, boolean excludeAlbums, ImgurClientInterface callback){
         String url = buildSearchGalleryUrl(searchTerm,searchType,excludeAlbums);
-        Log.e(TAG,"Searching Gallery with url: "+ url);
+        Log.i(TAG,"Searching Gallery with url: "+ url);
         fetchImages(url,callback);
     }
 

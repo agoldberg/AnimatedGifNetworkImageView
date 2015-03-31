@@ -5,14 +5,20 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Movie;
 import android.graphics.Paint;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 
-import com.amg.android.animatedgifnetworkimageview.R;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 public class AnimatedGifView extends View {
+
+    private static final String TAG = AnimatedGifView.class.getSimpleName();
 
     private Movie mMovie;
     private long mMovieStart;
@@ -32,20 +38,72 @@ public class AnimatedGifView extends View {
         return os.toByteArray();
     }
 
-    public AnimatedGifView(Context context, int resId) {
+    public AnimatedGifView(Context context) {
         super(context);
 
         setFocusable(true);
 
-        InputStream is = context.getResources().openRawResource(resId);
 
+    }
+
+    public void setImageResource(int resId) {
+        InputStream is = getResources().openRawResource(resId);
+        makeMovie(is);
+    }
+
+    public void setImageUrl(final String url){
+        GifTask gifTask = new GifTask(url);
+        gifTask.execute();
+    }
+
+    private void makeMovie(InputStream is){
         if (DECODE_STREAM) {
             mMovie = Movie.decodeStream(is);
         } else {
             byte[] array = streamToBytes(is);
             mMovie = Movie.decodeByteArray(array, 0, array.length);
         }
+        post(new Runnable() {
+            public void run() {
+                invalidate();
+            }
+        });
+
     }
+
+    private class GifTask extends AsyncTask<Void, Void, Void> {
+        private final Void Void = null;
+
+        private String url;
+
+        public GifTask(String url){
+            this.url = url;
+        }
+
+        @Override
+        protected void onPreExecute() { }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                URLConnection conn = new URL(url).openConnection();
+                conn.connect();
+                BufferedInputStream bis = new BufferedInputStream(conn.getInputStream(), 8192);
+                makeMovie(bis);
+
+            } catch (Exception e){
+                Log.e(TAG, "Error fetching Gif:", e);
+            }
+            return Void;
+        }
+
+    }
+
 
     @Override
     protected void onDraw(Canvas canvas) {

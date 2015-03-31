@@ -3,7 +3,6 @@ package com.amg.android.animatedgifnetworkimageview.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 import com.amg.android.animatedgifnetworkimageview.R;
 import com.amg.android.animatedgifnetworkimageview.data.client.ImgurClient;
 import com.amg.android.animatedgifnetworkimageview.data.model.ImgurImage;
+import com.amg.android.animatedgifnetworkimageview.ui.AnimatedGifView;
 import com.android.volley.toolbox.NetworkImageView;
 
 import java.util.List;
@@ -25,23 +25,27 @@ public class ImgurListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_list, container, false);
+//        View rootView = inflater.inflate(R.layout.fragment_list, container, false);
+//
+//        final RecyclerView recyclerView = (RecyclerView)rootView.findViewById(R.id.list);
+//        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
+//
+//          imgurClient = ImgurClient.getInstance(getActivity().getApplicationContext());
+//        imgurClient.searchGallery("cats",ImgurClient.IMGUR_EXT_ANIGIF,true,new ImgurClient.ImgurClientInterface() {
+//            @Override
+//            public void onPostExecute(boolean success) {
+//                List<ImgurImage> images = imgurClient.getImgurImages();
+//                if (success && images != null) {
+//                    recyclerView.setAdapter(new ListAdapter(images));
+//                }
+//            }
+//        });
 
-        final RecyclerView recyclerView = (RecyclerView)rootView.findViewById(R.id.list);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
-
-        imgurClient = ImgurClient.getInstance(getActivity().getApplicationContext());
-        imgurClient.searchGallery("cats",ImgurClient.IMGUR_EXT_ANIGIF,true,new ImgurClient.ImgurClientInterface() {
-            @Override
-            public void onPostExecute(boolean success) {
-                List<ImgurImage> images = imgurClient.getImgurImages();
-                if (success && images != null) {
-                    recyclerView.setAdapter(new ListAdapter(images));
-                }
-            }
-        });
-
+        AnimatedGifView rootView = new AnimatedGifView(getActivity());
+//        rootView.setImageResource(R.drawable.freak_out);
+        rootView.setImageUrl("http://i.imgur.com/9WxaoAS.gif");
         return rootView;
+
     }
 
     private class ListViewHolder extends RecyclerView.ViewHolder {
