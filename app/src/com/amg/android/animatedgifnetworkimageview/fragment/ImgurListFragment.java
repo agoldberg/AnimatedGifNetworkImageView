@@ -12,8 +12,7 @@ import android.widget.TextView;
 import com.amg.android.animatedgifnetworkimageview.R;
 import com.amg.android.animatedgifnetworkimageview.data.client.ImgurClient;
 import com.amg.android.animatedgifnetworkimageview.data.model.ImgurImage;
-import com.amg.android.animatedgifnetworkimageview.ui.AnimatedGifView;
-import com.android.volley.toolbox.NetworkImageView;
+import com.amg.android.animatedgifnetworkimageview.ui.AnimatedGifNetworkImageView;
 
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class ImgurListFragment extends Fragment {
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
 
         imgurClient = ImgurClient.getInstance(getActivity().getApplicationContext());
-        imgurClient.searchGallery("cats",ImgurClient.IMGUR_EXT_ANIGIF,true,new ImgurClient.ImgurClientInterface() {
+        imgurClient.searchGallery("cats",null,true,new ImgurClient.ImgurClientInterface() {
             @Override
             public void onPostExecute(boolean success) {
                 List<ImgurImage> images = imgurClient.getImgurImages();
@@ -48,17 +47,18 @@ public class ImgurListFragment extends Fragment {
 
     private class ListViewHolder extends RecyclerView.ViewHolder {
 
-        private AnimatedGifView imageView;
+        private AnimatedGifNetworkImageView imageView;
         private TextView titleView;
 
         public ListViewHolder(View view){
             super(view);
-            imageView = (AnimatedGifView)view.findViewById(R.id.image);
+            imageView = (AnimatedGifNetworkImageView)view.findViewById(R.id.image);
             titleView = (TextView)view.findViewById(R.id.title);
         }
 
         public void populateFrom(ImgurImage imgurImage){
-            imageView.setImageUrl(imgurImage.getLink());
+            imageView.setRequestQueue(imgurClient.getRequestQueue());
+            imageView.setImageUrl(imgurImage.getLink(),imgurClient.getImageLoader());
             titleView.setText(imgurImage.getTitle());
         }
     }

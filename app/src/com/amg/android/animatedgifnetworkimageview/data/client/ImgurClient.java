@@ -169,7 +169,7 @@ public class ImgurClient {
         return images.size()>0?images:null;
     }
 
-    private RequestQueue getRequestQueue() {
+    public RequestQueue getRequestQueue() {
         if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(ctx);
         }
